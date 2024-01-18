@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active {
+  @apply text-green-600 bg-green-400/10 ;
+}
+
+.active:hover {
+  @apply hover:bg-green-500/20 ;
+}
