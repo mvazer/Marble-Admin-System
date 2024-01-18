@@ -5,8 +5,8 @@ import { useUser } from "./useUser";
 import Spinner from "../../ui/Spinner";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("azer@mail.com");
+  const [password, setPassword] = useState("123456");
   const [error, setError] = useState({
     email: { message: "", state: ["empty"] },
     password: { message: "", state: ["empty", "min"], value: 6 },
@@ -117,7 +117,7 @@ function Login() {
           <input
             className="h-10 rounded-md border border-slate-700 bg-transparent px-3 py-1 shadow-md "
             id="password"
-            type="password"
+            // type="password"
             value={password}
             onChange={(e) => changeHandler(e, setPassword, "password")}
           ></input>
