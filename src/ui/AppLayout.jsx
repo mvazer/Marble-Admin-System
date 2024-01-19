@@ -30,7 +30,7 @@ function AppLayout() {
         className={`font-montserrat  lg:grid lg:h-screen lg:grid-cols-[18%_auto] lg:grid-rows-[10%_auto] lg:overflow-clip`}
       >
         <Header />
-        <Sidebar collapse={collapse} />
+        <Sidebar collapse={collapse} setCollapse={setCollapse} />
 
         <main className="relative overflow-auto  md:p-4">{<Outlet />}</main>
       </div>

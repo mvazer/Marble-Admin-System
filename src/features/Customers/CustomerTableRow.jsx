@@ -78,7 +78,7 @@ function CustomerTableRow({ customer, salesTotal }) {
           `${customer.name}`
         )}
       </td>
-      <td className="h-14 md:p-2 md:px-6">
+      <td className="hidden h-14 p-2 px-6 md:table-cell">
         {edit ? (
           <input
             className="w-[70%]  rounded-md border border-slate-700 bg-transparent px-3 py-1 text-center shadow-md "

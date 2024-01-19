@@ -29,7 +29,7 @@ function CustomerTable() {
         <TableHead
           headers={[
             "Ad",
-            "Əlaqə, w-[35%] w-fit",
+            "Əlaqə,md:table-cell hidden w-[35%] w-fit",
             "Qeyd, hidden lg:table-cell",
             "Gəlir",
             "Qalıq borc",
