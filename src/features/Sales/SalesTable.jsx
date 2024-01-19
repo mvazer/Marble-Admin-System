@@ -1,5 +1,7 @@
 import { compareAsc, compareDesc } from "date-fns";
+import React from "react";
 import { useSearchParams } from "react-router-dom";
+import Pagination from "../../ui/Pagination";
 import Spinner from "../../ui/Spinner";
 import TableHead from "../../ui/TableHead";
 import { useCustomer } from "../Customers/useCustomer";
@@ -7,7 +9,8 @@ import { useProducts } from "../Warehouse/useProducts";
 import SaleTotalTableRow from "./SaleTotalTableRow";
 import { useSales } from "./useSales";
 import { useSalesTotal } from "./useSalesTotal";
-import Pagination from "../../ui/Pagination";
+
+
 
 function SalesTable() {
   const { sales, isSalesLoading } = useSales();

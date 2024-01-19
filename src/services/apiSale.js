@@ -8,6 +8,17 @@ export async function getSale() {
   return { sale, error };
 }
 
+export async function getSaleId(key, value) {
+  const { data: sale, error } = await supabase
+    .from("sale")
+    .select("*")
+    .eq(key, value);
+
+  if (error) throw new Error(error);
+
+  return { sale, error };
+}
+
 export async function createSale(object) {
   const { data, error } = await supabase.from("sale").insert(object).select();
 

@@ -2,6 +2,7 @@ import { differenceInCalendarDays, differenceInDays } from "date-fns";
 import { useRef, useState } from "react";
 import {
   HiChevronDown,
+  HiOutlineDocument,
   HiOutlineEye,
   HiOutlinePencil,
   HiOutlineTrash,
@@ -106,7 +107,7 @@ function SaleTotalTableRow({ total, customers, sales, products, numSale }) {
                 ref={buttonRef}
                 className={`${
                   hover ? "visible opacity-100" : "invisible opacity-0"
-                } absolute gap-2 transition-all duration-300 hidden md:flex`}
+                } absolute transition-all duration-300 hidden md:flex`}
               >
                 <button
                   onClick={(e) => {
@@ -116,6 +117,15 @@ function SaleTotalTableRow({ total, customers, sales, products, numSale }) {
                   className="rounded-full p-2 transition-all hover:bg-green-600/25 disabled:cursor-not-allowed"
                 >
                   <HiOutlineEye />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(`/sales/invoice/${id}`);
+                  }}
+                  className="rounded-full p-2 transition-all hover:bg-green-600/25 disabled:cursor-not-allowed"
+                >
+                  <HiOutlineDocument />
                 </button>
                 <button
                   onClick={(e) => {

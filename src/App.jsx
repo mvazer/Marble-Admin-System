@@ -14,6 +14,7 @@ import Sales from "./pages/Sales";
 import Warehouse from "./pages/Warehouse";
 import AppLayout from "./ui/AppLayout";
 import TransactionsPage from "./pages/Transactions";
+import SaleInvoice from "./pages/SaleInvoice";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,22 +29,28 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
       <BrowserRouter>
-        {<Routes>
-          <Route element={<AppLayout />}>
-            <Route index element={<Navigate replace to="/dashboard" />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/warehouse" element={<Warehouse />} />
-            <Route path="/sales" element={<Sales />} />
-            <Route path="/sales/:salesTotalId" element={<Sale />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/customers/:customerId" element={<Customer />} />
-            <Route path="/costs" element={<Costs />} />
-            <Route path="/transactions" element={<TransactionsPage />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="*" element={<ErrorPage />} />
-          </Route>
-          <Route path="/login" element={<LoginPage />} />
-        </Routes>}
+        {
+          <Routes>
+            <Route element={<AppLayout />}>
+              <Route index element={<Navigate replace to="/dashboard" />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/warehouse" element={<Warehouse />} />
+              <Route path="/sales" element={<Sales />} />
+              <Route path="/sales/:salesTotalId" element={<Sale />} />
+              <Route
+                path="/sales/invoice/:salesTotalId"
+                element={<SaleInvoice />}
+              />
+              <Route path="/customers" element={<Customers />} />
+              <Route path="/customers/:customerId" element={<Customer />} />
+              <Route path="/costs" element={<Costs />} />
+              <Route path="/transactions" element={<TransactionsPage />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="*" element={<ErrorPage />} />
+            </Route>
+            <Route path="/login" element={<LoginPage />} />
+          </Routes>
+        }
       </BrowserRouter>
       <Toaster
         position="top-center"

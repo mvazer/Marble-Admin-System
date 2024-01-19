@@ -9,6 +9,7 @@ export async function getCustomers() {
 }
 
 export async function getCustomer(key, value) {
+  if(!value) return
   const { data: customer, error } = await supabase
     .from("customer")
     .select("*")

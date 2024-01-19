@@ -70,9 +70,9 @@ function CustomerSalesData() {
                 "Gəlir",
               ]}
             />
-            {salesTotalCustomer.saleTotal.map((total) => (
+            {salesTotalCustomer.saleTotal.map((total, i) => (
               <SaleTotalTableRow
-                numSale={1}
+                numSale={i + 1}
                 key={total.id}
                 total={total}
                 customers={customer.customer}

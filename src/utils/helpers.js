@@ -1,7 +1,7 @@
-export const formatCurrency = (value) =>
+export const formatCurrency = (value, currency='₼') =>
   new Intl.NumberFormat("az-AZ", { style: "currency", currency: "AZN" })
     .format(value)
-    .replace("AZN", "₼");
+    .replace("AZN", currency);
 
 export function formatNumber(num) {
   if (Math.abs(num) >= 1000) {
