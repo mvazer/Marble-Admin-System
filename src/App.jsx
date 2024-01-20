@@ -15,6 +15,7 @@ import Warehouse from "./pages/Warehouse";
 import AppLayout from "./ui/AppLayout";
 import TransactionsPage from "./pages/Transactions";
 import SaleInvoice from "./pages/SaleInvoice";
+import Losses from "./pages/Losses";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,6 +36,7 @@ function App() {
               <Route index element={<Navigate replace to="/dashboard" />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/warehouse" element={<Warehouse />} />
+              <Route path="/warehouse/losses" element={<Losses />} />
               <Route path="/sales" element={<Sales />} />
               <Route path="/sales/:salesTotalId" element={<Sale />} />
               <Route

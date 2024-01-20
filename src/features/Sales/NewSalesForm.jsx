@@ -120,14 +120,14 @@ function NewSalesForm({ onClose }) {
       (acc, product, i) => {
         if (!acc.some((d) => d.id === product.id))
           acc.push({
-            quantity: totalQuantity[Object.keys(data.product)[i]],
+            object: { quantity: totalQuantity[Object.keys(data.product)[i]] },
             id: product.id,
             paletteNumber: product.paletteNumber,
           });
         else
           acc.forEach((d) => {
             if (d.id === product.id)
-              d.quantity = d.quantity - Number(product.quantity);
+              d.object.quantity = d.object.quantity - Number(product.quantity);
           });
 
         return acc;
@@ -137,7 +137,7 @@ function NewSalesForm({ onClose }) {
 
     // console.log(updateProductData);
     const sumQuantities = updateProductData.reduce((acc, d) => {
-      if (d.quantity < 0) acc.push(d.paletteNumber);
+      if (d.object.quantity < 0) acc.push(d.paletteNumber);
       return acc;
     }, []);
 

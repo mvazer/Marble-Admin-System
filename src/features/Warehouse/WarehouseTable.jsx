@@ -1,16 +1,12 @@
 import { useSearchParams } from "react-router-dom";
-import Spinner from "../../ui/Spinner";
+import Pagination from "../../ui/Pagination";
 import TableHead from "../../ui/TableHead";
 import WarehouseTableRow from "./WarehouseTableRow";
-import { useProducts } from "./useProducts";
-import Pagination from "../../ui/Pagination";
 
-function WarehouseTable() {
+function WarehouseTable({ products, isLoss = false }) {
   const [searcParams] = useSearchParams();
-  const { products, isLoading } = useProducts();
 
   const sortBy = searcParams.get("sortBy") || "nameAsc";
-  if (isLoading) return <Spinner />;
 
   const filterBy = searcParams.get("filterBy") || "all";
 
@@ -53,7 +49,7 @@ function WarehouseTable() {
         />
         <tbody>
           {pagedProducts.map((product) => (
-            <WarehouseTableRow product={product} key={product.id} />
+            <WarehouseTableRow product={product} key={product.id} isLoss={isLoss} />
           ))}
         </tbody>
       </table>

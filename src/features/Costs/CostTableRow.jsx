@@ -7,7 +7,7 @@ import {
   HiOutlineXCircle,
 } from "react-icons/hi2";
 import CostDeleteForm from "./CostDeleteForm";
-import { formatNumber } from "../../utils/helpers";
+import { formatCurrencyNumber, formatNumber } from "../../utils/helpers";
 import { useUpdateCost } from "./useUpdateCost";
 import toast from "react-hot-toast";
 
@@ -100,7 +100,7 @@ function CostTableRow({ cost }) {
             {value * quantity}
           </span>
         ) : (
-          `₼ ${formatNumber(cost.value * cost.quantity)}`
+          `₼ ${(cost.value * cost.quantity).toFixed(2)}`
         )}
       </td>
       <td className=" hidden h-14 items-center justify-between md:flex md:p-2 md:px-6">

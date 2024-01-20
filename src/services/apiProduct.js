@@ -8,7 +8,19 @@ export async function getProducts() {
   return { product, error };
 }
 
+export async function getLossProducts() {
+  const { data: product, error } = await supabase
+    .from("product")
+    .select("*")
+    .gt("loss", 0);
+
+  if (error) throw new Error(error);
+
+  return { product, error };
+}
+
 export async function getFilteredProducts({ key, value }) {
+  console.log(key, value);
   const { data: product, error } = await supabase
     .from("product")
     .select("*")
@@ -19,10 +31,10 @@ export async function getFilteredProducts({ key, value }) {
   return { product, error };
 }
 
-export async function updateProduct({ id, quantity }) {
+export async function updateProduct({ id, object }) {
   const { data, error } = await supabase
     .from("product")
-    .update({ quantity })
+    .update(object)
     .eq("id", id)
     .select();
 

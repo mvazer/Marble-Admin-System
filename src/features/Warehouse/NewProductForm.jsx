@@ -191,7 +191,7 @@ function NewProductForm({ onClose }) {
       key === "paletteNumber"
         ? setValue(
             `product.${rowId}.${key}`,
-            Number(Object.values(lastObj)[i]) + 1,
+            (Number(lastObj.paletteNumber) + 1).toString(),
           )
         : setValue(`product.${rowId}.${key}`, Object.values(obj)[i]),
     );
@@ -204,8 +204,10 @@ function NewProductForm({ onClose }) {
   }
 
   const nextPaletteNumber =
-    products.product.length > 0 ?products.product.sort((a, b) => b.paletteNumber - a.paletteNumber)[0]
-      .paletteNumber + 1 : 1;
+    products.product.length > 0
+      ? products.product.sort((a, b) => b.paletteNumber - a.paletteNumber)[0]
+          .paletteNumber + 1
+      : 1;
   if (isLoading) return <Spinner />;
 
   return (
