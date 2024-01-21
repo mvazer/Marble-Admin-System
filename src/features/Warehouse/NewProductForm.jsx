@@ -49,6 +49,7 @@ function NewProductForm({ onClose }) {
       ...data.product[row.id],
       container_id: uuid,
       cost: 1,
+      initialQuantity: data.product[row.id].quantity,
     }));
 
     const containerCost =

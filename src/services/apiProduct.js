@@ -20,7 +20,6 @@ export async function getLossProducts() {
 }
 
 export async function getFilteredProducts({ key, value }) {
-  console.log(key, value);
   const { data: product, error } = await supabase
     .from("product")
     .select("*")
@@ -52,4 +51,15 @@ export async function createProduct(object) {
   if (error) throw new Error(error);
 
   return { data, error };
+}
+
+export async function deleteProducts(value) {
+  const { error } = await supabase
+    .from("product")
+    .delete()
+    .eq("container_id", value);
+
+  if (error) throw new Error(error);
+
+  return { error };
 }

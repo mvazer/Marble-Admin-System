@@ -13,3 +13,16 @@ export function useProductsName({ value, id = "" }) {
 
   return { products, isLoading, refetch };
 }
+
+export function useProductContainer(value) {
+  const {
+    data: products,
+    refetch,
+    isPending: isLoading,
+  } = useQuery({
+    queryKey: [`productsContainer${value}`],
+    queryFn: () => getFilteredProducts({ key: "container_id", value }),
+  });
+
+  return { products, isLoading, refetch };
+}

@@ -1,9 +1,9 @@
 import { HiOutlineChevronRight } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
+import WarehouseTable from "../features/Warehouse/WarehouseTable";
 import { useLossProducts } from "../features/Warehouse/useProducts";
 import Spinner from "../ui/Spinner";
-import WarehouseTable from "../features/Warehouse/WarehouseTable";
-import { formatCurrencyNumber, formatSquareMeters } from "../utils/helpers";
+import { formatCurrencyNumber } from "../utils/helpers";
 
 function Losses() {
   const navigate = useNavigate();

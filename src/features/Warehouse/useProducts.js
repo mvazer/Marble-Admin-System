@@ -10,6 +10,7 @@ export function useProducts() {
   return { products, isLoading };
 }
 
+
 export function useLossProducts() {
   const { data: products, isPending: isLoading } = useQuery({
     queryKey: ["productsLoss"],

@@ -3,7 +3,7 @@ import { formatCurrency, formatSquareMeters } from "../../utils/helpers";
 import { HiChevronDoubleDown, HiOutlinePencil } from "react-icons/hi2";
 import ProductEditForm from "./ProductEditForm";
 
-function WarehouseTableRow({ product, isLoss }) {
+function WarehouseTableRow({ product, isLoss, isContainer = false }) {
   const [hover, setHover] = useState(false);
   const [toggle, setToggle] = useState("");
   const {
@@ -16,6 +16,7 @@ function WarehouseTableRow({ product, isLoss }) {
     length,
     paletteNumber,
     loss,
+    initialQuantity,
   } = product;
 
   return (
@@ -28,7 +29,11 @@ function WarehouseTableRow({ product, isLoss }) {
     >
       <td className=" p-2 px-4 md:pl-16">{name}</td>
       <td className=" p-2 px-4">{paletteNumber}</td>
-      <td className=" p-2 px-4 ">{`${thickness}x${width}x${length}`}</td>
+      <td className=" p-2 px-4 ">
+        {width === length && width === "Sərbəst boy"
+          ? `${thickness}xPlaka`
+          : `${thickness}x${width}x${length}`}
+      </td>
       <td className=" p-2 px-4">{formatCurrency(cost)}</td>
       <td className=" p-2 px-4">
         {isLoss ? (
@@ -55,6 +60,9 @@ function WarehouseTableRow({ product, isLoss }) {
           </div>
         )}
       </td>
+      {isContainer && (
+        <td className=" p-2 px-4">{formatSquareMeters(initialQuantity)}</td>
+      )}
       {toggle === "edit" && (
         <ProductEditForm
           setToggle={setToggle}

@@ -24,11 +24,17 @@ function Warehouse() {
         </Modal>
       </div>
       <div className="flex flex-col items-center justify-between gap-4 pt-4 md:flex-row md:px-24">
-        <div className="flex gap-4">
+        <div className="flex gap-1">
           <FilterWithOptions />
           <button
+            onClick={() => navigate("container")}
+            className={` mx-px hidden rounded-lg border border-slate-950 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-50 transition-all duration-150 hover:bg-slate-700 md:block`}
+          >
+            Konteynerlər
+          </button>
+          <button
             onClick={() => navigate("losses")}
-            className={` mx-px rounded-lg border border-slate-950 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-50 transition-all duration-150 hover:bg-slate-700 md:block hidden`}
+            className={` mx-px hidden rounded-lg border border-slate-950 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-50 transition-all duration-150 hover:bg-slate-700 md:block`}
           >
             İtkilər
           </button>
