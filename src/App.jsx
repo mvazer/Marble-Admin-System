@@ -9,14 +9,14 @@ import Customers from "./pages/Customers";
 import Dashboard from "./pages/Dashboard";
 import ErrorPage from "./pages/ErrorPage";
 import LoginPage from "./pages/LoginPage";
+import Losses from "./pages/Losses";
 import Sale from "./pages/Sale";
+import SaleInvoice from "./pages/SaleInvoice";
 import Sales from "./pages/Sales";
+import TransactionsPage from "./pages/Transactions";
+import WarehouseContainer from "./pages/WareHouseContainer";
 import Warehouse from "./pages/Warehouse";
 import AppLayout from "./ui/AppLayout";
-import TransactionsPage from "./pages/Transactions";
-import SaleInvoice from "./pages/SaleInvoice";
-import Losses from "./pages/Losses";
-import WarehouseContainer from "./pages/WareHouseContainer";
 
 const queryClient = new QueryClient({
   defaultOptions: {
