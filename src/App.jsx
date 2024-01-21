@@ -14,7 +14,7 @@ import Sale from "./pages/Sale";
 import SaleInvoice from "./pages/SaleInvoice";
 import Sales from "./pages/Sales";
 import TransactionsPage from "./pages/Transactions";
-import WarehouseContainer from "./pages/WareHouseContainer";
+import WarehouseContainer from "./pages/WarehouseContainer";
 import Warehouse from "./pages/Warehouse";
 import AppLayout from "./ui/AppLayout";
 
