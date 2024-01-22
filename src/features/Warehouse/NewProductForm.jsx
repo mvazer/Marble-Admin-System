@@ -157,11 +157,14 @@ function NewProductForm({ onClose }) {
 
     // return;
 
-    addCash({
-      name: `${containerData.arrivalDate} Konteyner`,
-      value: totalCost * -1,
-    })
-      .then(() => addContainer(containerData))
+    addContainer(containerData)
+      .then(() =>
+        addCash({
+          container_id: uuid,
+          name: `${containerData.arrivalDate} Konteyner`,
+          value: totalCost * -1,
+        }),
+      )
       .then(() =>
         addProduct(productData, {
           onSuccess: () => {

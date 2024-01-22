@@ -14,8 +14,8 @@ import Sale from "./pages/Sale";
 import SaleInvoice from "./pages/SaleInvoice";
 import Sales from "./pages/Sales";
 import TransactionsPage from "./pages/Transactions";
-import WarehouseContainer from "./pages/WarehouseContainer";
 import Warehouse from "./pages/Warehouse";
+import WarehouseContainer from "./pages/WarehouseContainer";
 import AppLayout from "./ui/AppLayout";
 
 const queryClient = new QueryClient({

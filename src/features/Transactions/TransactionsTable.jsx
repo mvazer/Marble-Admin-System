@@ -1,4 +1,4 @@
-import { compareDesc } from "date-fns";
+import { compareAsc, compareDesc } from "date-fns";
 import Spinner from "../../ui/Spinner";
 import TableHead from "../../ui/TableHead";
 import { useCash } from "../Cash/useCash";
@@ -18,12 +18,14 @@ function TransactionsTable({ newTransaction, setNewTransaction }) {
 
   if (isLoading) return <Spinner />;
 
-  const pagedCash = cash.cash.slice(
-    page > 0 ? NUM_RESULT * page - NUM_RESULT : 1,
-    page <= Math.ceil(cash.cash.length / NUM_RESULT)
-      ? NUM_RESULT * page
-      : Math.ceil(cash.cash.length / NUM_RESULT),
-  );
+  const pagedCash = cash.cash
+    .sort((a, b) => compareDesc(new Date(a.created_at), new Date(b.created_at)))
+    .slice(
+      page > 0 ? NUM_RESULT * page - NUM_RESULT : 1,
+      page <= Math.ceil(cash.cash.length / NUM_RESULT)
+        ? NUM_RESULT * page
+        : Math.ceil(cash.cash.length / NUM_RESULT),
+    );
 
   return (
     <>
@@ -33,13 +35,9 @@ function TransactionsTable({ newTransaction, setNewTransaction }) {
           {newTransaction && (
             <TransactionsTableInputRow setNewTransaction={setNewTransaction} />
           )}
-          {pagedCash
-            .sort((a, b) =>
-              compareDesc(new Date(a.created_at), new Date(b.created_at)),
-            )
-            .map((obj) => (
-              <TransactionsTableRow key={obj.id} cash={obj} />
-            ))}
+          {pagedCash.map((obj) => (
+            <TransactionsTableRow key={obj.id} cash={obj} />
+          ))}
         </tbody>
       </table>
       <Pagination object={cash.cash} pageResult={NUM_RESULT} />

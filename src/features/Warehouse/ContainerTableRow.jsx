@@ -8,6 +8,7 @@ import ConfirmForm from "../../ui/ConfirmForm";
 import toast from "react-hot-toast";
 import { useDeleteContainer } from "./useDeleteContainer";
 import { useDeleteProducts } from "./useDeleteProduct";
+import { useDeleteCash } from "../Cash/useDeleteCash";
 
 function ContainerTableRow({ item }) {
   const [collapse, setCollapse] = useState(false);
@@ -16,6 +17,7 @@ function ContainerTableRow({ item }) {
   const buttonRef = useRef();
 
   const { products, isLoading } = useProductContainer(item.id);
+  const { deleteCash, isCashDeleting } = useDeleteCash();
   const { deleteContainer, isDeletingContainer } = useDeleteContainer();
   const { deleteProducts, isDeletingProducts } = useDeleteProducts();
 
@@ -32,7 +34,9 @@ function ContainerTableRow({ item }) {
       setToggle("");
       return;
     }
-    deleteProducts(item.id).then(() => deleteContainer(item.id));
+    deleteProducts(item.id)
+      .then(() => deleteCash(item.id))
+      .then(() => deleteContainer(item.id));
   }
 
   return (
@@ -99,7 +103,11 @@ function ContainerTableRow({ item }) {
         </>
       )}
       {toggle === "delete" && (
-        <ConfirmForm submitHandler={deleteHandler} setToggle={setToggle}>
+        <ConfirmForm
+          loading={isDeletingContainer || isDeletingProducts || isCashDeleting}
+          submitHandler={deleteHandler}
+          setToggle={setToggle}
+        >
           Konteyneri silmək istədiyinizə əminsiz? (Üzərindən satış olumuş
           konteyner silinə bilməz)
         </ConfirmForm>

@@ -9,3 +9,4 @@ export function useCash() {
 
   return { cash, isLoadingCash };
 }
+

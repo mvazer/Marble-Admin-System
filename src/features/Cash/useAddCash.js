@@ -10,7 +10,8 @@ export function useAddCash() {
       toast.success("Büdcə uğurla əlavə edildi.");
       queryClient.invalidateQueries(["cash"]);
     },
-    onError: () => {
+    onError: (err) => {
+      console.error(err);
       toast.error("Büdcə əlavə edilərkən xəta baş verdi.");
     },
   });
