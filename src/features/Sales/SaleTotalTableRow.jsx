@@ -28,6 +28,7 @@ function SaleTotalTableRow({ total, customers, sales, products, numSale }) {
     totalProfit,
     paid,
     isFinished,
+    isDeleted,
   } = total;
   const filteredSales = sales.filter((obj) => obj.sale_id === id);
   const customer = customers.find((obj) => obj.id === customer_id);
@@ -61,7 +62,9 @@ function SaleTotalTableRow({ total, customers, sales, products, numSale }) {
                 <>
                   <span
                     className={`${
-                      endDuration <= 3 ? "bg-red-800" : "bg-slate-300/70 text-slate-950"
+                      endDuration <= 3
+                        ? "bg-red-800"
+                        : "bg-slate-300/70 text-slate-950"
                     } mx-auto w-fit rounded-xl px-3 py-[0.05rem] text-slate-50`}
                   >
                     {endDate === "Son tarix yoxdu" && "Müddətsiz"}
@@ -93,12 +96,18 @@ function SaleTotalTableRow({ total, customers, sales, products, numSale }) {
                 : formatCurrency(totalRevenue - paid)}
             </span>
           </td>
-          <td className=" p-4 px-6 hidden md:block">{formatCurrency(totalProfit)}</td>
+          <td className=" p-4 px-6 hidden md:block">
+            {formatCurrency(totalProfit)}
+          </td>
           <td className="p-4 px-6">
             <div className=" flex items-center justify-center">
               <span
                 className={`${
-                  !hover ? "md:visible opacity-100 " : "md:invisible opacity-0 visible opacity-100"
+                  isDeleted
+                    ? ""
+                    : !hover
+                      ? "md:visible opacity-100 "
+                      : "md:invisible visible opacity-100"
                 } font-semibold`}
               >
                 {formatCurrency(totalRevenue)}
@@ -106,7 +115,9 @@ function SaleTotalTableRow({ total, customers, sales, products, numSale }) {
               <div
                 ref={buttonRef}
                 className={`${
-                  hover ? "visible opacity-100" : "invisible opacity-0"
+                  hover && !isDeleted
+                    ? "visible opacity-100"
+                    : "invisible opacity-0"
                 } absolute transition-all duration-300 hidden md:flex`}
               >
                 <button

@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 import Spinner from "../../ui/Spinner";
 import { formatSquareMeters } from "../../utils/helpers";
 import { useUpdateProduct } from "./useUpdateProduct";
+import { useAddHistory } from "../History/useAddHistory";
+import { useUser } from "../Authentication/useUser";
 
 function ProductEditForm({
   setToggle,
@@ -17,7 +19,9 @@ function ProductEditForm({
   const ModalRef = useRef();
 
   const { updateProduct, isUpdatingProduct } = useUpdateProduct();
-  //   const isUpdating = isCostAdding || isUpdatingProduct;
+  const { addHistory, isAddingHistory } = useAddHistory();
+  const { user, isUserLoading } = useUser();
+  const isUpdating = isAddingHistory || isUpdatingProduct || isUserLoading;
 
   function submitHandler(e) {
     e.preventDefault();
@@ -41,7 +45,17 @@ function ProductEditForm({
       object: { quantity: +leftQuantity - +quantity, loss: +quantity },
     };
 
-    updateProduct(updateData)
+    const historyData = {
+      eventType: "container",
+      eventID: id,
+      eventAction: "editContainer",
+      eventDescription: { loss: quantity },
+      userID: user.user.id,
+      username: user.user.user_metadata["username"] || "",
+      userEmail: user.user.email,
+    };
+
+    updateProduct(updateData).then(() => addHistory(historyData));
     setQuantity(0);
     setToggle("");
   }
@@ -91,16 +105,16 @@ function ProductEditForm({
           </div>
           <button
             onClick={(e) => submitHandler(e)}
-            //   disabled={isUpdatingSaleTotal}
+            disabled={isUpdating}
             className="ml-auto h-fit w-fit self-end rounded-full bg-green-300/70 px-4 py-2 text-center text-sm font-semibold transition-all duration-150 hover:bg-green-400"
           >
-            {/* {isUpdatingSaleTotal ? "Təsdiqlənir..." : "Təsdiqlə"} */}
-            Təsdiqlə
+            {isUpdating ? "Təsdiqlənir..." : "Təsdiqlə"}
+            {/* Təsdiqlə */}
           </button>
         </div>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 }
 

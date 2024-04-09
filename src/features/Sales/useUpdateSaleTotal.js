@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 export function useUpdateSaleTotal() {
   const queryClient = useQueryClient();
 
-  const { mutate: updateSaleTotal, isPending: isUpdatingSaleTotal } =
+  const { mutateAsync: updateSaleTotal, isPending: isUpdatingSaleTotal } =
     useMutation({
       mutationFn: ({ id, object }) => {updateSaleTotalApi(id, object)},
       onSuccess: () => {

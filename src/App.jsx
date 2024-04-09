@@ -17,6 +17,7 @@ import TransactionsPage from "./pages/Transactions";
 import Warehouse from "./pages/Warehouse";
 import WarehouseContainer from "./pages/WarehouseContainer";
 import AppLayout from "./ui/AppLayout";
+import HistoryPage from "./pages/HistoryPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,7 +39,10 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/warehouse" element={<Warehouse />} />
               <Route path="/warehouse/losses" element={<Losses />} />
-              <Route path="/warehouse/container" element={<WarehouseContainer />} />
+              <Route
+                path="/warehouse/container"
+                element={<WarehouseContainer />}
+              />
               <Route path="/sales" element={<Sales />} />
               <Route path="/sales/:salesTotalId" element={<Sale />} />
               <Route
@@ -49,6 +53,7 @@ function App() {
               <Route path="/customers/:customerId" element={<Customer />} />
               <Route path="/costs" element={<Costs />} />
               <Route path="/transactions" element={<TransactionsPage />} />
+              <Route path="/history" element={<HistoryPage />} />
               <Route path="/account" element={<Account />} />
               <Route path="*" element={<ErrorPage />} />
             </Route>

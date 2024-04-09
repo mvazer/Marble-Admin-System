@@ -22,6 +22,7 @@ function Sales() {
             { value: "all", name: "Hamısı" },
             { value: "paid", name: "Ödənilənlər" },
             { value: "unpaid", name: "Ödənilmiyənlər" },
+            { value: "deleted", name: "Silinənlər" },
           ]}
         />
 

@@ -3,14 +3,23 @@ import { createPortal } from "react-dom";
 import { useUpdateProduct } from "../Warehouse/useUpdateProduct";
 import { useDeleteSale } from "./useDeleteSale";
 import { useDeleteSaleTotal } from "./useDeleteSaleTotal";
+import { useUser } from "../Authentication/useUser";
+import { useAddHistory } from "../History/useAddHistory";
 
 function SaleDeleteForm({ setToggle, id, filteredSales, products }) {
   const ModalRef = useRef();
   const { updateProduct, isUpdatingProduct } = useUpdateProduct();
   const { deleteSale, isDeletingSale } = useDeleteSale();
   const { deleteSaleTotal, isDeletingSaleTotal } = useDeleteSaleTotal();
+  const { addHistory, isAddingHistory } = useAddHistory();
+  const { user, isUserLoading } = useUser();
 
-  const isLoading = isUpdatingProduct || isDeletingSale || isDeletingSaleTotal;
+  const isLoading =
+    isUpdatingProduct ||
+    isDeletingSale ||
+    isDeletingSaleTotal ||
+    isAddingHistory ||
+    isUserLoading;
 
   function deleteHandler() {
     if (isLoading) return;
@@ -21,9 +30,18 @@ function SaleDeleteForm({ setToggle, id, filteredSales, products }) {
         products.find((product) => product.id === product_id).quantity +
         productQuantity;
 
-      return updateProduct({ quantity, id: product_id }).then(() =>
-        deleteSale(sale.id),
-      );
+      const historyData = {
+        eventType: "saleTotal",
+        eventID: id,
+        eventAction: "deleteSale",
+        userID: user.user.id,
+        username: user.user.user_metadata["username"] || "",
+        userEmail: user.user.email,
+      };
+
+      return updateProduct({ object: { quantity }, id: product_id })
+        .then(() => deleteSale(sale.id))
+        .then(() => addHistory(historyData));
     });
     Promise.all(updatePromises)
       .then(() => deleteSaleTotal(id))
@@ -66,7 +84,7 @@ function SaleDeleteForm({ setToggle, id, filteredSales, products }) {
         </div>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 }
 

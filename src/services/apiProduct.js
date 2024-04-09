@@ -1,7 +1,10 @@
 import supabase from "./supabase";
 
 export async function getProducts() {
-  const { data: product, error } = await supabase.from("product").select("*");
+  const { data: product, error } = await supabase
+    .from("product")
+    .select("*")
+    .eq("isDeleted", false);
 
   if (error) throw new Error(error);
 
@@ -12,6 +15,7 @@ export async function getLossProducts() {
   const { data: product, error } = await supabase
     .from("product")
     .select("*")
+    .eq("isDeleted", false)
     .gt("loss", 0);
 
   if (error) throw new Error(error);
@@ -56,7 +60,7 @@ export async function createProduct(object) {
 export async function deleteProducts(value) {
   const { error } = await supabase
     .from("product")
-    .delete()
+    .update({ isDeleted: true })
     .eq("container_id", value);
 
   if (error) throw new Error(error);

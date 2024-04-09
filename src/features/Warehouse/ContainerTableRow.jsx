@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { useDeleteContainer } from "./useDeleteContainer";
 import { useDeleteProducts } from "./useDeleteProduct";
 import { useDeleteCash } from "../Cash/useDeleteCash";
+import { useUser } from "../Authentication/useUser";
+import { useAddHistory } from "../History/useAddHistory";
 
 function ContainerTableRow({ item }) {
   const [collapse, setCollapse] = useState(false);
@@ -20,12 +22,21 @@ function ContainerTableRow({ item }) {
   const { deleteCash, isCashDeleting } = useDeleteCash();
   const { deleteContainer, isDeletingContainer } = useDeleteContainer();
   const { deleteProducts, isDeletingProducts } = useDeleteProducts();
+  const { addHistory, isAddingHistory } = useAddHistory();
+  const { user, isUserLoading } = useUser();
+
+  const isDataLoading =
+    isDeletingContainer ||
+    isDeletingProducts ||
+    isCashDeleting ||
+    isAddingHistory ||
+    isUserLoading;
 
   const sumValue =
     isLoading ||
     products.product.reduce(
       (acc, cur) => acc + cur.cost * cur.initialQuantity,
-      0,
+      0
     );
 
   function deleteHandler() {
@@ -34,9 +45,20 @@ function ContainerTableRow({ item }) {
       setToggle("");
       return;
     }
+
+    const historyData = {
+      eventType: "conatiner",
+      eventID: item.id,
+      eventAction: "deleteContainer",
+      userID: user.user.id,
+      username: user.user.user_metadata["username"] || "",
+      userEmail: user.user.email,
+    };
+
     deleteProducts(item.id)
       .then(() => deleteCash(item.id))
-      .then(() => deleteContainer(item.id));
+      .then(() => deleteContainer(item.id))
+      .then(() => addHistory(historyData));
   }
 
   return (
@@ -104,7 +126,7 @@ function ContainerTableRow({ item }) {
       )}
       {toggle === "delete" && (
         <ConfirmForm
-          loading={isDeletingContainer || isDeletingProducts || isCashDeleting}
+          loading={isDataLoading}
           submitHandler={deleteHandler}
           setToggle={setToggle}
         >

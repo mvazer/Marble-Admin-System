@@ -11,6 +11,8 @@ import { useAddSaleTotal } from "./useAddSaleTotal";
 import { useUpdateProduct } from "../Warehouse/useUpdateProduct";
 import { formatCurrency } from "../../utils/helpers";
 import toast from "react-hot-toast";
+import { useUser } from "../Authentication/useUser";
+import { useAddHistory } from "../History/useAddHistory";
 
 function NewSalesForm({ onClose }) {
   const [numProductRows, setMumProductRows] = useState([
@@ -29,6 +31,8 @@ function NewSalesForm({ onClose }) {
   const { addSale, isAddingSale } = useAddSale();
   const { addSaleTotal, isAddingSaleTotal } = useAddSaleTotal();
   const { updateProduct, isUpdatingProduct } = useUpdateProduct();
+  const { addHistory, isAddingHistory } = useAddHistory();
+  const { user, isUserLoading } = useUser();
 
   const {
     register,
@@ -39,37 +43,6 @@ function NewSalesForm({ onClose }) {
     getValues,
     formState: { errors },
   } = useForm();
-
-  // function quantitySum(data) {
-  //   const products = Object.values(data.product);
-  //   const paletteNumbers = products.map((product) => product.paletteNumber);
-  //   const samePaletteNumber = paletteNumbers.reduce(
-  //     (acc, currentValue, index, array) => {
-  //       if (!acc[currentValue]) {
-  //         acc[currentValue] = [];
-  //       }
-
-  //       const indexes = array
-  //         .map((item, i) => (item === currentValue && i !== index ? i : null))
-  //         .filter((item) => item !== null);
-
-  //       if (indexes.length > 0 && !acc[currentValue].includes(index)) {
-  //         indexes.push(index);
-  //         acc[currentValue] = acc[currentValue].concat(indexes);
-  //       }
-  //       return acc;
-  //     },
-  //     {},
-  //   );
-  //   const quantities = Object.keys(samePaletteNumber).map((paletteNum) => {
-  //     return {
-  //       [paletteNum]: samePaletteNumber[paletteNum].reduce(
-  //         (acc, num) => Number(products[num]?.quantity) + acc,
-  //         0,
-  //       ),
-  //     };
-  //   });
-  // }
 
   function addNewFormHandler(e) {
     e.preventDefault();
@@ -85,7 +58,7 @@ function NewSalesForm({ onClose }) {
       setMumProductRows((v) => v.filter((row) => row.id !== id));
       unregister(`product.${id}`);
     },
-    [unregister],
+    [unregister]
   );
 
   const onSubmit = (data) => {
@@ -132,7 +105,7 @@ function NewSalesForm({ onClose }) {
 
         return acc;
       },
-      [],
+      []
     );
 
     // console.log(updateProductData);
@@ -144,38 +117,49 @@ function NewSalesForm({ onClose }) {
     if (sumQuantities.length > 0) {
       toast.error(
         `Palet ${sumQuantities.join(
-          ", ",
-        )} satış miqdarı palet miqdarından artıqdır.`,
+          ", "
+        )} satış miqdarı palet miqdarından artıqdır.`
       );
       return;
     }
+
+    const historyData = {
+      eventType: "saleTotal",
+      eventID: saleId,
+      eventAction: "addSale",
+      userID: user.user.id,
+      username: user.user.user_metadata["username"] || "",
+      userEmail: user.user.email,
+    };
 
     // return;
 
     addSaleTotal(saleTotalData).then(() =>
       addSale(saleData).then(() =>
-        updateProductData.map((data, i) =>
-          updateProduct(data, {
-            onSuccess: () => {
-              reset();
-              onClose();
-            },
-          }),
-        ),
-      ),
+        addHistory(historyData).then(() =>
+          updateProductData.map((data, i) =>
+            updateProduct(data, {
+              onSuccess: () => {
+                reset();
+                onClose();
+              },
+            })
+          )
+        )
+      )
     );
   };
 
   const sumValue = Object.values(totalSum).reduce(
     (acc, currentValue) => acc + currentValue,
-    0,
+    0
   );
 
   const totalValue = sumValue - discount + extraCost;
 
   const costValue = Object.values(totalCost).reduce(
     (acc, currentValue) => acc + currentValue,
-    0,
+    0
   );
 
   const endDate = format(addDays(new Date(), Number(day)), "yyyy.MM.dd");
@@ -244,39 +228,6 @@ function NewSalesForm({ onClose }) {
             <span className="text-sm text-green-700">Son tarix: {endDate}</span>
           )}
         </div>
-        {/* <div className="mt-8 flex items-center justify-start">
-        <div className={`flex w-[20%] flex-col gap-2 px-2`}>
-          <label
-            className="flex items-center justify-between font-semibold"
-            htmlFor="endDate"
-          >
-            <span>Son təhvil tarixi</span>{" "}
-            <input
-              checked={endDateCheck}
-              onChange={(e) => {
-                setEndDateCheck(e.target.checked);
-                setValue("endDate", e.target.checked ? "" : "Son tarix yoxdu");
-              }}
-              type="checkbox"
-            />
-          </label>
-
-          <input
-            className="h-10 rounded-md border border-slate-700 bg-transparent px-3 py-1 shadow-md"
-            readOnly={!endDateCheck}
-            defaultValue='Son tarix yoxdu'
-            id="endDate"
-            {...register("endDate", { required: true })}
-          />
-          {errors?.endDate && (
-            <span className="text-sm text-red-600">Bu xana vacibdir.</span>
-          )}
-          {endDateCheck && (
-            <span className="text-sm text-yellow-700">
-              Son tarix:
-            </span>
-          )}
-        </div> */}
 
         <FormInput
           prefix="₼"
@@ -341,10 +292,20 @@ function NewSalesForm({ onClose }) {
           </span>
         </div>
         <button
-          disabled={isAddingSale || isAddingSaleTotal || isUpdatingProduct}
+          disabled={
+            isAddingSale ||
+            isAddingSaleTotal ||
+            isUpdatingProduct ||
+            isUserLoading ||
+            isAddingHistory
+          }
           className="ml-6 mt-8 flex h-12 items-center rounded-3xl border border-transparent bg-green-500 px-6  text-lg font-semibold text-stone-50 shadow-lg transition-all  hover:bg-green-400 hover:shadow-xl disabled:cursor-not-allowed disabled:bg-green-300 "
         >
-          {!isAddingSale && !isAddingSaleTotal && !isUpdatingProduct
+          {!isAddingSale &&
+          !isAddingSaleTotal &&
+          !isUpdatingProduct &&
+          !isAddingHistory &&
+          !isUserLoading
             ? "Təsdiqlə"
             : "Yüklənir..."}
         </button>

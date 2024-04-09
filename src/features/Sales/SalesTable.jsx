@@ -8,14 +8,14 @@ import { useCustomer } from "../Customers/useCustomer";
 import { useProducts } from "../Warehouse/useProducts";
 import SaleTotalTableRow from "./SaleTotalTableRow";
 import { useSales } from "./useSales";
-import { useSalesTotal } from "./useSalesTotal";
-
-
+import { useSalesTotal, useSalesTotalDeleted } from "./useSalesTotal";
 
 function SalesTable() {
   const { sales, isSalesLoading } = useSales();
   const { customers, isLoadingCustomers } = useCustomer();
   const { salesTotal, isSalesTotalLoading } = useSalesTotal();
+  const { deletedSalesTotal, isDeletedSalesTotalLoading } =
+    useSalesTotalDeleted();
   const { products, isLoading: isProductsLoading } = useProducts();
   const [searcParams] = useSearchParams();
 
@@ -23,6 +23,7 @@ function SalesTable() {
     isSalesLoading ||
     isSalesTotalLoading ||
     isLoadingCustomers ||
+    isDeletedSalesTotalLoading ||
     isProductsLoading;
 
   const sortBy = searcParams.get("sortBy") || "createDateDesc";
@@ -34,12 +35,16 @@ function SalesTable() {
 
   const NUM_RESULT = 10;
 
-  const filteredProducts = salesTotal.saleTotal.filter(
-    (saleTotal) =>
-      filterBy === "all" ||
-      (filterBy === "paid" && saleTotal.paid === saleTotal.totalRevenue) ||
-      (filterBy === "unpaid" && saleTotal.paid !== saleTotal.totalRevenue),
-  );
+  const filteredProducts =
+    filterBy === "deleted"
+      ? deletedSalesTotal.saleTotal
+      : salesTotal.saleTotal.filter(
+          (saleTotal) =>
+            filterBy === "all" ||
+            (filterBy === "paid" &&
+              saleTotal.paid === saleTotal.totalRevenue) ||
+            (filterBy === "unpaid" && saleTotal.paid !== saleTotal.totalRevenue)
+        );
 
   //created_at, endDate, totalRevenue
 
@@ -68,7 +73,7 @@ function SalesTable() {
     page > 0 ? NUM_RESULT * page - NUM_RESULT : 1,
     page <= Math.ceil(sortedProducts.length / NUM_RESULT)
       ? NUM_RESULT * page
-      : Math.ceil(sortedProducts.length / NUM_RESULT),
+      : Math.ceil(sortedProducts.length / NUM_RESULT)
   );
 
   return (

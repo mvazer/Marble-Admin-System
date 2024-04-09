@@ -4,6 +4,7 @@ import {
   HiOutlineBanknotes,
   HiOutlineBuildingOffice,
   HiOutlineChartPie,
+  HiOutlineClock,
   HiOutlineHome,
   HiOutlineUserCircle,
   HiOutlineUserGroup,
@@ -81,6 +82,16 @@ function Sidebar({ collapse, setCollapse }) {
           >
             <HiArrowsRightLeft />
             <span>Əməliyyatlar</span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            onClick={() => setCollapse(true)}
+            to="/history"
+            className="flex items-center gap-2 rounded-xl p-2 text-lg text-slate-950 transition-all duration-300 hover:bg-slate-200/70 "
+          >
+            <HiOutlineClock />
+            <span>Tarixçə</span>
           </NavLink>
         </li>
       </ul>

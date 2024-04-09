@@ -28,7 +28,10 @@ export async function createSale(object) {
 }
 
 export async function deleteSale(id) {
-  const { error } = await supabase.from("sale").delete().eq("id", id);
+  const { error } = await supabase
+    .from("sale")
+    .update({ isDeleted: true })
+    .eq("id", id);
 
   if (error) throw new Error(error);
 }

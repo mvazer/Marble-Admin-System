@@ -15,6 +15,15 @@ export function useSalesTotal() {
   return { salesTotal, isSalesTotalLoading };
 }
 
+export function useSalesTotalDeleted() {
+  const { data: deletedSalesTotal, isPending: isDeletedSalesTotalLoading } = useQuery({
+    queryKey: [`deletedSalesTotal`],
+    queryFn: () => getSaleTotal(true),
+  });
+
+  return { deletedSalesTotal, isDeletedSalesTotalLoading };
+}
+
 export function useSalesTotalCustomer() {
   const { customerId } = useParams();
   const { data: salesTotalCustomer, isPending: isSalesTotalCustomerLoading } =

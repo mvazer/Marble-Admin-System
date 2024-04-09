@@ -5,8 +5,8 @@ import { useUser } from "./useUser";
 import Spinner from "../../ui/Spinner";
 
 function Login() {
-  const [email, setEmail] = useState("azer@mail.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState({
     email: { message: "", state: ["empty"] },
     password: { message: "", state: ["empty", "min"], value: 6 },

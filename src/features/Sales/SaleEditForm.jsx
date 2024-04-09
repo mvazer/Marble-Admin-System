@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { formatCurrency } from "../../utils/helpers";
 import { createPortal } from "react-dom";
 import { useUpdateSaleTotal } from "./useUpdateSaleTotal";
+import { useUser } from "../Authentication/useUser";
+import { useAddHistory } from "../History/useAddHistory";
 
 function SaleEditForm({ setToggle, leftPayment, id, paid, isFinishedInitial }) {
   const [payment, setPayment] = useState(0);
@@ -10,6 +12,9 @@ function SaleEditForm({ setToggle, leftPayment, id, paid, isFinishedInitial }) {
   const ModalRef = useRef();
 
   const { updateSaleTotal, isUpdatingSaleTotal } = useUpdateSaleTotal();
+  const { addHistory, isAddingHistory } = useAddHistory();
+  const { user, isUserLoading } = useUser();
+  const isLoading = isUpdatingSaleTotal || isAddingHistory || isUserLoading;
 
   function submitHandler(e) {
     e.preventDefault();
@@ -31,7 +36,21 @@ function SaleEditForm({ setToggle, leftPayment, id, paid, isFinishedInitial }) {
       id,
       object: { paid: +paid + +payment, isFinished },
     };
-    updateSaleTotal(updateSaleTotalData);
+
+    const historyData = {
+      eventType: "saleTotal",
+      eventID: id,
+      eventAction: "editSale",
+      eventDescription: {
+        paid: payment,
+        isFinished: isFinishedInitial !== isFinished,
+      },
+      userID: user.user.id,
+      username: user.user.user_metadata["username"] || "",
+      userEmail: user.user.email,
+    };
+
+    updateSaleTotal(updateSaleTotalData).then(() => addHistory(historyData));
     setPayment(0);
     setIsFinished(0);
     setToggle("");
@@ -97,16 +116,16 @@ function SaleEditForm({ setToggle, leftPayment, id, paid, isFinishedInitial }) {
             </label>
             <button
               onClick={(e) => submitHandler(e)}
-              disabled={isUpdatingSaleTotal}
+              disabled={isLoading}
               className="ml-auto w-fit rounded-full bg-green-300/70 px-4 py-2 text-center text-sm font-semibold transition-all duration-150 hover:bg-green-400"
             >
-              {isUpdatingSaleTotal ? "Təsdiqlənir..." : "Təsdiqlə"}
+              {isLoading ? "Təsdiqlənir..." : "Təsdiqlə"}
             </button>
           </div>
         </div>
       </div>
     </div>,
-    document.body,
+    document.body
   );
 }
 

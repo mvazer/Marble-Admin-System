@@ -7,6 +7,7 @@ import { useContainers } from "./useContainers";
 function ContainerTable() {
   const { containers, isContainersLoading } = useContainers();
   if (isContainersLoading) return <Spinner />;
+ 
   return (
     <>
       <table className="w-full table-fixed border-collapse overflow-hidden rounded-3xl border-2 border-hidden p-2 text-xs shadow-lg md:w-[90%] md:text-base">
@@ -23,7 +24,7 @@ function ContainerTable() {
         <tbody>
           {containers.container
             .sort((a, b) =>
-              compareDesc(new Date(a.created_at), new Date(b.created_at)),
+              compareDesc(new Date(a.created_at), new Date(b.created_at))
             )
             .map((cur) => (
               <ContainerTableRow key={cur.id} item={cur} />

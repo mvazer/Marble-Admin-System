@@ -1,9 +1,10 @@
 import supabase from "./supabase";
 
-export async function getSaleTotal() {
+export async function getSaleTotal(isDeleted = false) {
   const { data: saleTotal, error } = await supabase
     .from("saleTotal")
-    .select("*");
+    .select("*")
+    .eq("isDeleted", isDeleted);
 
   if (error) throw new Error(error);
 
@@ -56,7 +57,10 @@ export async function createSaleTotal(object) {
 }
 
 export async function deleteSaleTotal(id) {
-  const { error } = await supabase.from("saleTotal").delete().eq("id", id);
+  const { error } = await supabase
+    .from("saleTotal")
+    .update({ isDeleted: true })
+    .eq("id", id);
 
   if (error) throw new Error(error);
 }

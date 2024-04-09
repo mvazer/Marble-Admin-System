@@ -13,6 +13,8 @@ import toast from "react-hot-toast";
 import { useProducts } from "./useProducts";
 import Spinner from "../../ui/Spinner";
 import { useAddCash } from "../Cash/useAddCash";
+import { useUser } from "../Authentication/useUser";
+import { useAddHistory } from "../History/useAddHistory";
 
 function NewProductForm({ onClose }) {
   const [numProductRows, setMumProductRows] = useState([
@@ -24,7 +26,14 @@ function NewProductForm({ onClose }) {
   const { options, isOptionsLoading } = useOptions();
   const { addOption, isOptionAdding } = useAddOption();
   const { addCash, isCashAdding } = useAddCash();
-  const dataIsAdding = isAddingContainer || isAddingProduct || isCashAdding;
+  const { addHistory, isAddingHistory } = useAddHistory();
+  const { user, isUserLoading } = useUser();
+  const dataIsAdding =
+    isAddingContainer ||
+    isAddingProduct ||
+    isCashAdding ||
+    isAddingHistory ||
+    isUserLoading;
   const isLoading = isOptionsLoading || isProductsLoading;
 
   const {
@@ -59,18 +68,18 @@ function NewProductForm({ onClose }) {
 
     const totalProductQuantity = productData.reduce(
       (acc, cur) => acc + Number(cur.quantity),
-      0,
+      0
     );
 
     const totalProductCost = productData.reduce(
       (acc, cur) => acc + Number(cur.quantity) * Number(cur.price),
-      0,
+      0
     );
 
     productData.map(
       (product) =>
         (product.cost =
-          containerCost / totalProductQuantity + Number(product.price)),
+          containerCost / totalProductQuantity + Number(product.price))
     );
 
     const totalCost = totalProductCost + containerCost;
@@ -113,33 +122,16 @@ function NewProductForm({ onClose }) {
           acc.push(cur.paletteNumber);
         return acc;
       },
-      [],
+      []
     );
 
-    // const samePaletteNumbersSum = samePaletteNumbers.reduce((acc, cur) => {
-    //   if (!acc.some((p) => p.paletteNumber === cur.paletteNumber))
-    //     acc.push({
-    //       paletteNumber: cur.paletteNumber,
-    //       sum: Number(cur.quantity),
-    //     });
-    //   else {
-    //     acc.forEach((p) => {
-    //       if (p.paletteNumber === cur.paletteNumber)
-    //         p.sum = p.sum + Number(cur.quantity);
-    //     });
-    //   }
-
-    //   return acc;
-    // }, []);
-
-    // console.log(productData);
     if (samePaletteNumbers.length) {
       toast.error(
         `${samePaletteNumbersSize.join(", ")} ${
           samePaletteNumbersSize.length > 1
             ? " palet nömrələri ilə paletlər mövcuddur."
             : " palet nömrəsi ilə palet mövcuddur."
-        } Eyni palet nömrəsi ilə bir neçə palet əlavə etmək olmaz.`,
+        } Eyni palet nömrəsi ilə bir neçə palet əlavə etmək olmaz.`
       );
       return;
     }
@@ -150,12 +142,21 @@ function NewProductForm({ onClose }) {
           samePaletteNumbersDatabaseSize.length > 1
             ? " palet nömrələri ilə anbarda paletlər mövcuddur."
             : " palet nömrəsi ilə anbarda palet mövcuddur."
-        } Eyni palet nömrəsi ilə bir neçə palet əlavə etmək olmaz.`,
+        } Eyni palet nömrəsi ilə bir neçə palet əlavə etmək olmaz.`
       );
       return;
     }
 
     // return;
+
+    const historyData = {
+      eventType: "container",
+      eventID: uuid,
+      eventAction: "addContainer",
+      userID: user.user.id,
+      username: user.user.user_metadata["username"] || "",
+      userEmail: user.user.email,
+    };
 
     addContainer(containerData)
       .then(() =>
@@ -163,15 +164,16 @@ function NewProductForm({ onClose }) {
           container_id: uuid,
           name: `${containerData.arrivalDate} Konteyner`,
           value: totalCost * -1,
-        }),
+        })
       )
+      .then(() => addHistory(historyData))
       .then(() =>
         addProduct(productData, {
           onSuccess: () => {
             reset();
             onClose();
           },
-        }),
+        })
       );
   };
 
@@ -195,9 +197,9 @@ function NewProductForm({ onClose }) {
       key === "paletteNumber"
         ? setValue(
             `product.${rowId}.${key}`,
-            (Number(lastObj.paletteNumber) + 1).toString(),
+            (Number(lastObj.paletteNumber) + 1).toString()
           )
-        : setValue(`product.${rowId}.${key}`, Object.values(obj)[i]),
+        : setValue(`product.${rowId}.${key}`, Object.values(obj)[i])
     );
   }
 
