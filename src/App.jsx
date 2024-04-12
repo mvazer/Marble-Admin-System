@@ -28,6 +28,7 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  console.log(import.meta.env);
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />

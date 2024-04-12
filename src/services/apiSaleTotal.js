@@ -1,6 +1,6 @@
 import supabase from "./supabase";
 
-export async function getSaleTotal(isDeleted = false) {
+export async function getSaleTotal({isDeleted = false}) {
   const { data: saleTotal, error } = await supabase
     .from("saleTotal")
     .select("*")

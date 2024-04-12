@@ -16,10 +16,11 @@ export function useSalesTotal() {
 }
 
 export function useSalesTotalDeleted() {
-  const { data: deletedSalesTotal, isPending: isDeletedSalesTotalLoading } = useQuery({
-    queryKey: [`deletedSalesTotal`],
-    queryFn: () => getSaleTotal(true),
-  });
+  const { data: deletedSalesTotal, isPending: isDeletedSalesTotalLoading } =
+    useQuery({
+      queryKey: [`deletedSalesTotal`],
+      queryFn: () => getSaleTotal({ isDeleted: true }),
+    });
 
   return { deletedSalesTotal, isDeletedSalesTotalLoading };
 }
